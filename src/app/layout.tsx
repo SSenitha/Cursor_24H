@@ -19,8 +19,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${display.variable}`}>
-      <body className="flex min-h-screen flex-col font-sans">
+    <html
+      lang="en"
+      className={`${sans.variable} ${display.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="flex min-h-screen flex-col font-sans" suppressHydrationWarning>
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

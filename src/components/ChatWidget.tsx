@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useState } from "react";
 
 const CHAT_URL = "https://bey.chat/35caf28b-c3f8-42a2-84fa-30e4404ed0f7";
+const PROMPT = "Need a help? Ask me!";
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -61,22 +62,55 @@ export function ChatWidget() {
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={() => setOpen((prev) => !prev)}
-        aria-expanded={open}
-        aria-controls={open ? panelId : undefined}
-        aria-label={open ? "Close chat assistant" : "Open chat assistant"}
-        className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-saffron-500 text-jungle-950 shadow-lg shadow-jungle-900/25 transition hover:bg-saffron-400 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron-600 active:scale-95"
-      >
-        {open ? <CloseIcon className="h-6 w-6" /> : <ChatIcon className="h-6 w-6" />}
+      <div className="flex items-center gap-3 sm:gap-4">
         {!open && (
-          <span className="pointer-events-none absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-saffron-300 opacity-75" />
-            <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-saffron-200 ring-2 ring-white" />
-          </span>
+          <p
+            className="relative max-w-[13rem] rounded-2xl border-2 border-saffron-200 bg-white px-4 py-3 text-base font-bold leading-snug shadow-xl shadow-saffron-500/20 [animation:chat-bubble-pop_0.55s_ease-out_both] sm:max-w-none sm:whitespace-nowrap"
+            role="status"
+          >
+            <span className="text-jungle-900">Need a help? </span>
+            <span className="text-saffron-600">Ask me!</span>
+            <span
+              className="absolute -right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rotate-45 border-r-2 border-b-2 border-saffron-200 bg-white"
+              aria-hidden
+            />
+          </p>
         )}
-      </button>
+
+        <div className="relative shrink-0">
+          {!open && (
+            <>
+              <span
+                className="pointer-events-none absolute inset-0 rounded-full bg-saffron-400/40 [animation:chat-glow-pulse_2s_ease-in-out_infinite]"
+                aria-hidden
+              />
+              <span
+                className="pointer-events-none absolute -inset-1 rounded-full border-2 border-dashed border-saffron-400/50 [animation:chat-ring-spin_8s_linear_infinite]"
+                aria-hidden
+              />
+            </>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setOpen((prev) => !prev)}
+            aria-expanded={open}
+            aria-controls={open ? panelId : undefined}
+            aria-label={open ? "Close chat assistant" : `${PROMPT} — open chat assistant`}
+            className={`relative z-10 flex items-center justify-center rounded-full border-[3px] border-white/90 bg-gradient-to-br from-saffron-300 via-saffron-500 to-saffron-700 text-jungle-950 transition hover:scale-105 hover:from-saffron-200 hover:via-saffron-400 hover:to-saffron-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-saffron-500 active:scale-95 ${
+              open
+                ? "h-14 w-14 shadow-lg"
+                : "h-[4.25rem] w-[4.25rem] sm:h-[4.75rem] sm:w-[4.75rem] [animation:chat-icon-bounce_1.2s_ease-in-out_infinite,chat-glow-pulse_2s_ease-in-out_infinite]"
+            }`}
+          >
+            {open ? (
+              <CloseIcon className="h-7 w-7" />
+            ) : (
+              <ChatIcon className="h-9 w-9 drop-shadow-sm sm:h-10 sm:w-10" />
+            )}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -86,14 +120,24 @@ function ChatIcon({ className }: { className?: string }) {
     <svg
       className={className}
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      fill="currentColor"
       aria-hidden
     >
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      <path
+        fillOpacity="0.15"
+        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+      />
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+      />
+      <circle cx="9" cy="11" r="1" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="11" r="1" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="11" r="1" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -105,7 +149,7 @@ function CloseIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="2.5"
       strokeLinecap="round"
       aria-hidden
     >
