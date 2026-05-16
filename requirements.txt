@@ -1,0 +1,21 @@
+# Ceylon Explorer — runtime requirements
+# This is a Node.js / Next.js app (not Python). npm packages are in package.json.
+
+node>=20.0.0
+npm>=10.0.0
+
+# Required data file (must exist before build/dev):
+#   src/data/scraped.json
+
+# Quick start (from this web/ folder):
+#   npm install          # skip if you copied node_modules/
+#   npm run dev          # http://localhost:3000
+#   npm run build        # production build
+#   npm start            # run production build
+
+# Windows if npm is not on PATH:
+#   & "C:\Program Files\nodejs\npm.cmd" install
+#   & "C:\Program Files\nodejs\npm.cmd" run dev
+
+# Refresh data after re-scraping (adjust source path to your scraper output):
+#   Copy-Item "<path-to>\scraped_combined_output copy.json" "src\data\scraped.json" -Force
