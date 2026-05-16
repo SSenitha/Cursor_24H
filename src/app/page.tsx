@@ -21,8 +21,7 @@ export default function HomePage() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-jungle-100/90">
             Explore {stats.tours} tour packages, {stats.destinations} destinations, and{" "}
-            {stats.experiences} unique experiences — powered by your scraped Jetwing Travels
-            dataset.
+            {stats.experiences} unique experiences from our curated Sri Lanka dataset.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
@@ -90,7 +89,7 @@ export default function HomePage() {
           </div>
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featuredExperiences.map((exp) => (
-              <ExperienceCard key={exp.url} experience={exp} />
+              <ExperienceCard key={exp.id} experience={exp} />
             ))}
           </div>
         </div>

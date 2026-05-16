@@ -30,7 +30,7 @@ export default async function ExperiencesPage({ searchParams }: ExperiencesPageP
         </p>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {experiences.map((e) => (
-            <ExperienceCard key={e.url} experience={e} />
+            <ExperienceCard key={e.id} experience={e} />
           ))}
         </div>
       </section>
