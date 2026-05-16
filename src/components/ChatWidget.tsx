@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useState } from "react";
 
-const CHAT_URL = "https://bey.chat/35caf28b-c3f8-42a2-84fa-30e4404ed0f7";
+const CHAT_URL = "https://bey.chat/75a2f315-05c2-43e7-8cf3-bc65c1bfb335";
 const PROMPT = "Need a help? Ask me!";
 
 export function ChatWidget() {
