@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | Ceylon Explorer",
   },
   description:
-    "Browse curated tours, destinations, and experiences across Sri Lanka from scraped Jetwing Travels data.",
+    "Browse curated tours, destinations, and experiences across Sri Lanka.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
