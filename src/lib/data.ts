@@ -1,7 +1,39 @@
 import scraped from "@/data/scraped.json";
-import type { Destination, Experience, ScrapedData, Tour } from "@/types/scraped";
+import type {
+  Destination,
+  Experience,
+  ExperiencePage,
+  ScrapedData,
+  Tour,
+} from "@/types/scraped";
 
 const data = scraped as ScrapedData;
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function flattenExperiences(pages: ExperiencePage[]): Experience[] {
+  const idCounts = new Map<string, number>();
+  const result: Experience[] = [];
+
+  for (const page of pages) {
+    for (const profile of page.experiences) {
+      const base = slugify(profile.experience);
+      const count = idCounts.get(base) ?? 0;
+      idCounts.set(base, count + 1);
+      const id = count === 0 ? base : `${base}-${count + 1}`;
+      result.push({ id, experience_profile: profile });
+    }
+  }
+
+  return result;
+}
+
+const experiences = flattenExperiences(data.experiences);
 
 export function getAllTours(): Tour[] {
   return data.tours;
@@ -20,11 +52,11 @@ export function getDestinationBySlug(slug: string): Destination | undefined {
 }
 
 export function getAllExperiences(): Experience[] {
-  return data.experiences;
+  return experiences;
 }
 
 export function getExperienceBySlug(slug: string): Experience | undefined {
-  return data.experiences.find((e) => experienceSlug(e) === slug);
+  return experiences.find((e) => experienceSlug(e) === slug);
 }
 
 export function slugFromUrl(url: string): string {
@@ -32,12 +64,7 @@ export function slugFromUrl(url: string): string {
 }
 
 export function experienceSlug(experience: Experience): string {
-  const fromUrl = slugFromUrl(experience.url);
-  if (fromUrl && fromUrl !== "experiences") return fromUrl;
-  return experience.experience_profile.experience
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+  return experience.id;
 }
 
 export function destinationName(destination: Destination): string {
@@ -56,7 +83,7 @@ export function getStats() {
   return {
     tours: data.tours.length,
     destinations: data.destinations.length,
-    experiences: data.experiences.length,
+    experiences: experiences.length,
   };
 }
 
@@ -69,7 +96,7 @@ export function filterTours(query: string, theme?: string): Tour[] {
       tour.tour_overview.package_name,
       tour.tour_overview.theme,
       tour.tour_overview.duration,
-      ...tour.itinerary_breakdown.map((d) => d.description),
+      ...tour.itinerary_breakdown.map((d) => `${d.route} ${d.description}`),
       ...tourHighlights(tour),
     ]
       .join(" ")
@@ -92,8 +119,8 @@ export function filterDestinations(query: string): Destination[] {
 
 export function filterExperiences(query: string): Experience[] {
   const q = query.trim().toLowerCase();
-  if (!q) return data.experiences;
-  return data.experiences.filter((e) => {
+  if (!q) return experiences;
+  return experiences.filter((e) => {
     const { experience, description } = e.experience_profile;
     return `${experience} ${description}`.toLowerCase().includes(q);
   });

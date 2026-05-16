@@ -12,6 +12,7 @@ export interface CoreInclusions {
 
 export interface ItineraryDay {
   day: string;
+  route: string;
   description: string;
 }
 
@@ -32,16 +33,23 @@ export interface Destination {
   };
 }
 
+export interface ExperienceProfile {
+  experience: string;
+  description: string;
+}
+
 export interface Experience {
+  id: string;
+  experience_profile: ExperienceProfile;
+}
+
+export interface ExperiencePage {
   url: string;
-  experience_profile: {
-    experience: string;
-    description: string;
-  };
+  experiences: ExperienceProfile[];
 }
 
 export interface ScrapedData {
   tours: Tour[];
   destinations: Destination[];
-  experiences: Experience[];
+  experiences: ExperiencePage[];
 }

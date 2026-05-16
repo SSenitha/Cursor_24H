@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExternalLink } from "@/components/ExternalLink";
 import {
   destinationName,
   getAllDestinations,
@@ -57,9 +56,6 @@ export default async function DestinationDetailPage({ params }: DestinationDetai
           ))}
         </ul>
       )}
-      <p className="mt-8">
-        <ExternalLink href={destination.url}>View on Jetwing Travels</ExternalLink>
-      </p>
     </article>
   );
 }

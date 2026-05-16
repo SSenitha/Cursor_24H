@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExternalLink } from "@/components/ExternalLink";
 import {
   experienceSlug,
   getAllExperiences,
@@ -45,9 +44,6 @@ export default async function ExperienceDetailPage({ params }: ExperienceDetailP
       </p>
       <h1 className="mt-2 font-display text-4xl font-semibold text-jungle-900">{title}</h1>
       <p className="mt-6 text-lg leading-relaxed text-jungle-700">{description}</p>
-      <p className="mt-8">
-        <ExternalLink href={experience.url}>View on Jetwing Travels</ExternalLink>
-      </p>
     </article>
   );
 }

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/Badge";
-import { ExternalLink } from "@/components/ExternalLink";
 import { getAllTours, getTourById, tourHighlights } from "@/lib/data";
 
 interface TourDetailPageProps {
@@ -45,9 +44,6 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
           <h1 className="mt-4 font-display text-4xl font-semibold text-jungle-900">
             {tour.tour_overview.package_name}
           </h1>
-          <p className="mt-4">
-            <ExternalLink href={tour.url}>View on Jetwing Travels</ExternalLink>
-          </p>
         </div>
       </header>
 
@@ -61,8 +57,11 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
                   key={day.day}
                   className="flex gap-4 rounded-xl border border-jungle-200 bg-white p-4 shadow-sm"
                 >
-                  <span className="shrink-0 font-semibold text-saffron-700">{day.day}</span>
-                  <p className="text-jungle-700">{day.description}</p>
+                  <span className="w-16 shrink-0 font-semibold text-saffron-700">{day.day}</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-jungle-900">{day.route}</p>
+                    <p className="mt-2 text-jungle-700">{day.description}</p>
+                  </div>
                 </li>
               ))}
             </ol>
