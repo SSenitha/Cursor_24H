@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "www.junglejourney.co.uk",
         pathname: "/wp-content/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "live.staticflickr.com",
+        pathname: "/**",
+      },
     ],
   },
 };
