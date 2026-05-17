@@ -3,6 +3,43 @@ import { ExperienceCard } from "@/components/ExperienceCard";
 import { TourCard } from "@/components/TourCard";
 import { getAllExperiences, getAllTours, getStats } from "@/lib/data";
 
+type HeroStatCounts = {
+  tours: number;
+  destinations: number;
+  experiences: number;
+};
+
+function HeroStatBoxes({ tours, destinations, experiences }: HeroStatCounts) {
+  const items = [
+    { value: tours, label: "Tour packages" },
+    { value: destinations, label: "Destinations" },
+    { value: experiences, label: "Experiences" },
+  ] as const;
+
+  return (
+    <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:mt-10 md:gap-5">
+      {items.map(({ value, label }, index) => (
+        <div
+          key={label}
+          className={[
+            "flex flex-col items-center justify-center rounded-2xl border border-white/15 bg-white/[0.08] px-4 py-7 text-center shadow-xl shadow-black/20 backdrop-blur-md sm:px-5 sm:py-8 md:px-6 md:py-9",
+            index === 2
+              ? "col-span-2 w-full max-w-xs justify-self-center sm:col-span-1 sm:max-w-none md:justify-self-auto"
+              : "",
+          ].join(" ")}
+        >
+          <dt className="font-display text-4xl font-bold tabular-nums leading-none tracking-tight text-saffron-300 sm:text-5xl md:text-[2.65rem]">
+            {value}
+          </dt>
+          <dd className="mt-3 text-sm font-medium leading-snug text-white/80 sm:text-base">
+            {label}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 export default function HomePage() {
   const stats = getStats();
   const featuredTours = getAllTours().slice(0, 3);
@@ -11,46 +48,46 @@ export default function HomePage() {
   return (
     <>
       <section className="relative overflow-hidden bg-gradient-to-br from-jungle-900 via-jungle-800 to-ocean-900 text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,168,46,0.2),transparent_50%)]" />
-        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <p className="text-sm font-medium uppercase tracking-widest text-saffron-300">
-            Sri Lankan Tourism
-          </p>
-          <h1 className="mt-4 max-w-3xl font-display text-balance text-4xl font-semibold leading-tight sm:text-6xl">
-            Discover Ceylon through curated tours &amp; experiences
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg text-jungle-100/90">
-            Explore {stats.tours} tour packages, {stats.destinations} destinations, and{" "}
-            {stats.experiences} unique experiences from our curated Sri Lanka dataset.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link
-              href="/tours"
-              className="rounded-full bg-saffron-500 px-6 py-3 text-sm font-semibold text-jungle-950 shadow-lg transition hover:bg-saffron-400"
-            >
-              Browse tours
-            </Link>
-            <Link
-              href="/destinations"
-              className="rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold backdrop-blur transition hover:bg-white/20"
-            >
-              View destinations
-            </Link>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,168,46,0.16),transparent_45%),radial-gradient(circle_at_85%_10%,rgba(77,170,184,0.22),transparent_42%),radial-gradient(ellipse_at_bottom,rgba(15,33,21,0.55),transparent_55%)]" />
+        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14 lg:py-16">
+          <div className="min-w-0">
+            <p className="text-sm font-medium uppercase tracking-widest text-saffron-300">
+              Sri Lankan Tourism
+            </p>
+            <h1 className="mt-3 max-w-4xl font-display text-balance text-4xl font-semibold leading-tight sm:mt-4 sm:text-6xl lg:mt-4">
+              Discover{" "}
+              <span className="bg-gradient-to-r from-saffron-200 via-saffron-400 to-saffron-500 bg-clip-text text-transparent">
+                Ceylon
+              </span>{" "}
+              through curated tours &amp;{" "}
+              <span className="bg-gradient-to-r from-ocean-200 via-ocean-300 to-white/95 bg-clip-text text-transparent">
+                experiences
+              </span>
+            </h1>
+            <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/85 sm:mt-4 sm:text-lg">
+              Explore {stats.tours} tour packages, {stats.destinations} destinations, and{" "}
+              {stats.experiences} unique experiences from our curated Sri Lanka dataset.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3 sm:mt-5 sm:gap-4">
+              <Link
+                href="/tours"
+                className="rounded-full bg-saffron-500 px-5 py-2.5 text-sm font-semibold text-jungle-950 shadow-lg transition hover:bg-saffron-400 sm:px-6 sm:py-3"
+              >
+                Browse tours
+              </Link>
+              <Link
+                href="/destinations"
+                className="rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-sm font-semibold backdrop-blur transition hover:bg-white/20 sm:px-6 sm:py-3"
+              >
+                View destinations
+              </Link>
+            </div>
+            <HeroStatBoxes
+              tours={stats.tours}
+              destinations={stats.destinations}
+              experiences={stats.experiences}
+            />
           </div>
-          <dl className="mt-14 grid grid-cols-3 gap-6 border-t border-white/15 pt-10 sm:max-w-lg">
-            <div>
-              <dt className="text-3xl font-semibold text-saffron-300">{stats.tours}</dt>
-              <dd className="mt-1 text-sm text-jungle-200">Tour packages</dd>
-            </div>
-            <div>
-              <dt className="text-3xl font-semibold text-saffron-300">{stats.destinations}</dt>
-              <dd className="mt-1 text-sm text-jungle-200">Destinations</dd>
-            </div>
-            <div>
-              <dt className="text-3xl font-semibold text-saffron-300">{stats.experiences}</dt>
-              <dd className="mt-1 text-sm text-jungle-200">Experiences</dd>
-            </div>
-          </dl>
         </div>
       </section>
 
