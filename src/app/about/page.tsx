@@ -105,7 +105,7 @@ export default function AboutPage() {
             </span>
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg">
-            Ceylon Explorer was born from a simple belief — that one of the world's most breathtaking islands deserves a travel guide as extraordinary as the destination itself.
+            Ceylon Explorer was born from a simple belief — that one of the world&#39;s most breathtaking islands deserves a travel guide as extraordinary as the destination itself.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
