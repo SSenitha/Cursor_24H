@@ -4,6 +4,7 @@ const NAV = [
   { href: "/tours", label: "Tours", hint: "Itineraries & packages" },
   { href: "/destinations", label: "Destinations", hint: "Where to wander" },
   { href: "/experiences", label: "Experiences", hint: "Things to feel" },
+  { href: "/about", label: "About", hint: "Our story & team" },
 ] as const;
 
 function FooterWaveDivider() {
@@ -126,14 +127,14 @@ export function SiteFooter() {
                   Developer note
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-jungle-300">
-                  Made by Codingers ❤ for Cursor AI buildathon 2026. Made with Cursor AI and Cursor IDE.
+                  Made by Codingers ❤ at Cursor Colombo 24Hrs Buildathon 2026. Made with Cursor AI and Cursor IDE.
                 </p>
               </div>
               <div className="mt-10 rounded-2xl border border-white/10 bg-black/25 p-4 backdrop-blur-sm">
                 <p className="text-xs uppercase tracking-[0.15em] text-saffron-400/95">
                   Stack
                 </p>
-                <p className="mt-2 text-sm font-medium text-jungle-100">Next.js · React · Tailwind</p>
+                <p className="mt-2 text-sm font-medium text-jungle-100">Cursor AI · Beyond Presence · ElevenLabs · LiveKit · n8n Cloud · Google Gemini 1.5 Flash · Next.js · Gmail API · Google Sheets · Vercel · React · Tailwind</p>
               </div>
             </div>
           </div>

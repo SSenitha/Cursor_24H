@@ -171,7 +171,7 @@ export function ChatWidget() {
               </button>
 
               <p className="text-center text-[11px] text-jungle-400 leading-relaxed">
-                Your details are shared only with Jetwing Travels and used solely to personalise your consultation.
+                Your details are shared only with Ceylon Explorer and used solely to personalise your consultation.
               </p>
             </form>
           )}
@@ -188,7 +188,7 @@ export function ChatWidget() {
           {step === "chat" && agentUrl && (
             <iframe
               src={agentUrl}
-              title="Serendib — Jetwing Travels assistant"
+              title="Serendib — Ceylon Explorer assistant"
               className="min-h-0 flex-1 w-full border-0 bg-white"
               allow="camera; microphone; fullscreen"
               allowFullScreen
