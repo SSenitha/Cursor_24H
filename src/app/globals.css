@@ -41,6 +41,12 @@
   }
 }
 
+@keyframes jw-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes chat-bubble-pop {
   0% {
     opacity: 0;
