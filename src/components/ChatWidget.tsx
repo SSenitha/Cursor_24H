@@ -94,9 +94,9 @@ export function ChatWidget() {
           <header className="flex shrink-0 items-center justify-between gap-3 border-b border-jungle-100 bg-jungle-900 px-5 py-4 text-white">
             <div className="min-w-0">
               <p id={labelId} className="truncate font-display text-sm font-semibold tracking-wide text-saffron-300">
-                JETWING TRAVELS
+                Ceylon Explorer
               </p>
-              <p className="truncate text-xs text-jungle-300">The Home of Sri Lankan Hospitality</p>
+              <p className="truncate text-xs text-jungle-300">AI Agent Portal</p>
             </div>
             <div className="flex items-center gap-2">
               {step !== "form" && (
