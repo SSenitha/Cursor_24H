@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useId, useState } from "react";
+import beyondPresenceLogo from "../resources/dark.svg";
 
 const PRECALL_URL = "https://gdeshocean.dev/webhook/jetwing-precall";
 const PROMPT = "Chat with Serendib!";
@@ -201,11 +203,20 @@ export function ChatWidget() {
       <div className="flex items-center gap-3 sm:gap-4">
         {!open && (
           <p
-            className="relative max-w-[13rem] rounded-2xl border-2 border-saffron-200 bg-white px-4 py-3 text-base font-bold leading-snug shadow-xl shadow-saffron-500/20 [animation:chat-bubble-pop_0.55s_ease-out_both] sm:max-w-none sm:whitespace-nowrap"
+            className="relative max-w-[13rem] rounded-2xl border-2 border-saffron-200 bg-white px-4 py-3 text-base font-bold leading-snug shadow-xl shadow-saffron-500/20 [animation:chat-bubble-pop_0.55s_ease-out_both] sm:max-w-none"
             role="status"
           >
             <span className="text-jungle-900">Chat with </span>
             <span className="text-saffron-600">Serendib!</span>
+            <span className="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-jungle-500">
+              <span>Powered by</span>
+              <Image
+                src={beyondPresenceLogo}
+                alt="Beyond Presence"
+                className="h-3 w-auto"
+                priority
+              />
+            </span>
             <span
               className="absolute -right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rotate-45 border-r-2 border-b-2 border-saffron-200 bg-white"
               aria-hidden
