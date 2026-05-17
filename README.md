@@ -1,6 +1,5 @@
 # Ceylon Explorer — Next.js Web App
 
-Dynamic tourism browser built from scraped Jetwing Travels JSON.
 
 **Moved to its own repo?** See `requirements.txt` and `AGENT_HANDOFF.md` in this folder.
 

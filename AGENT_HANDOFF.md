@@ -4,7 +4,7 @@ Use this file when continuing work in the **new repository** that contains the m
 
 ## What this app is
 
-A **Next.js 15** (App Router) tourism browser for Sri Lanka, built from scraped Jetwing Travels JSON:
+A **Next.js 15** (App Router) tourism browser for Sri Lanka, built from scraped Ceylon Explorer JSON:
 
 - **16** tour packages with itineraries, inclusions, highlights
 - **27** destinations
