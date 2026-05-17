@@ -29,6 +29,8 @@ export function SearchFilters({
         if (value) params.set(key, value);
         else params.delete(key);
       }
+      // Reset to page 1 whenever filters change
+      params.delete("page");
       startTransition(() => {
         const query = params.toString();
         router.push(query ? `${pathname}?${query}` : pathname);
