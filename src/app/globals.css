@@ -7,56 +7,178 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-jungle-50 text-jungle-950 antialiased;
+    @apply bg-slate-950 text-slate-100 antialiased;
   }
 }
 
-@keyframes chat-icon-bounce {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
+/* ─── Custom properties ──────────────────────────────────────────── */
+:root {
+  --glow-emerald: rgba(16, 185, 129, 0.55);
+  --glow-emerald-soft: rgba(16, 185, 129, 0.18);
+  --glow-teal: rgba(45, 212, 191, 0.35);
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────── */
+
+/* Aurora background shift */
+@keyframes aurora-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Gentle float */
+@keyframes float-up {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* Glow pulse (box-shadow) */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--glow-emerald),
+                0 8px 32px rgba(0,0,0,0.5);
   }
   50% {
-    transform: translateY(-0.5rem) scale(1.04);
+    box-shadow: 0 0 0 16px transparent,
+                0 0 48px var(--glow-emerald-soft),
+                0 8px 48px rgba(0,0,0,0.6);
   }
 }
 
-@keyframes chat-glow-pulse {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 0 rgba(249, 134, 10, 0.55),
-      0 8px 28px rgba(15, 33, 21, 0.35);
-  }
-  50% {
-    box-shadow:
-      0 0 0 12px rgba(249, 134, 10, 0),
-      0 12px 36px rgba(249, 134, 10, 0.45);
-  }
+/* Shimmer slide (for skeleton/loading) */
+@keyframes shimmer-slide {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-@keyframes chat-ring-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes jw-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes chat-bubble-pop {
-  0% {
+/* Fade in up (card entrance) */
+@keyframes fade-in-up {
+  from {
     opacity: 0;
-    transform: translateX(0.5rem) scale(0.92);
+    transform: translateY(24px);
   }
-  70% {
-    transform: translateX(-0.15rem) scale(1.02);
-  }
-  100% {
+  to {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateY(0);
   }
+}
+
+/* Spin */
+@keyframes spin-cw {
+  to { transform: rotate(360deg); }
+}
+
+/* Ring orbit */
+@keyframes ring-orbit {
+  to { transform: rotate(360deg); }
+}
+
+/* Status dot pulse */
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.75); }
+}
+
+/* Chat bubble pop */
+@keyframes bubble-pop {
+  0%   { opacity: 0; transform: scale(0.88) translateY(8px); }
+  70%  { transform: scale(1.03) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Tab underline slide */
+@keyframes underline-slide {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Legacy chat widget animations (keep for sub-page FAB) */
+@keyframes chat-icon-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-6px) scale(1.04); }
+}
+@keyframes chat-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16,185,129,0.55), 0 8px 28px rgba(0,0,0,0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(16,185,129,0), 0 12px 36px rgba(16,185,129,0.35);
+  }
+}
+@keyframes chat-ring-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes jw-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes chat-bubble-pop {
+  0%   { opacity: 0; transform: translateX(0.5rem) scale(0.92); }
+  70%  { transform: translateX(-0.15rem) scale(1.02); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* ─── Utility classes ────────────────────────────────────────────── */
+.animate-aurora {
+  background-size: 300% 300%;
+  animation: aurora-shift 12s ease infinite;
+}
+
+.animate-float {
+  animation: float-up 4s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.55s ease-out both;
+}
+
+.animate-status-pulse {
+  animation: status-pulse 1.8s ease-in-out infinite;
+}
+
+.animate-bubble-pop {
+  animation: bubble-pop 0.45s ease-out both;
+}
+
+.animate-ring-orbit {
+  animation: ring-orbit 8s linear infinite;
+}
+
+/* Glass card */
+.glass {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-hover {
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.glass-hover:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(16,185,129,0.22);
+  box-shadow: 0 4px 32px rgba(16,185,129,0.08);
+}
+
+/* Shimmer overlay */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.06) 50%,
+    transparent 100%
+  );
+  animation: shimmer-slide 1.8s infinite;
 }
