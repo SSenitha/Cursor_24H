@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import beyondPresenceLogo from "../resources/dark.svg";
 
 const PRECALL_URL = "https://gdeshocean.dev/webhook/jetwing-precall";
@@ -22,6 +22,45 @@ export function SerendibPanel({ embedded = false }: SerendibPanelProps) {
 
   const nameId  = useId();
   const emailId = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Lock page scroll for the entire chat step.
+  // Uses the "position: fixed" body-lock technique (same as every modal
+  // library) which makes it physically impossible for the browser to scroll
+  // the page — no race conditions, no timers, no jank.
+  useEffect(() => {
+    if (step !== "chat") return;
+
+    const body = document.body;
+    const html = document.documentElement;
+
+    // Save current scroll position
+    const scrollY = window.scrollY;
+
+    // Compensate for scrollbar width to prevent layout shift
+    const scrollbarWidth = window.innerWidth - html.clientWidth;
+
+    // Lock: fix the body in place at the current scroll offset
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+    body.style.paddingRight = `${scrollbarWidth}px`;
+    html.style.overflow = "hidden";
+
+    return () => {
+      // Unlock: restore body positioning and scroll position
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      body.style.width = "";
+      body.style.paddingRight = "";
+      html.style.overflow = "";
+      window.scrollTo(0, scrollY);
+    };
+  }, [step]);
 
   const reset = useCallback(() => {
     setStep("form");
@@ -59,10 +98,11 @@ export function SerendibPanel({ embedded = false }: SerendibPanelProps) {
 
   return (
     <div
+      ref={panelRef}
       id="serendib-panel"
       aria-label="Serendib AI agent panel"
       className={`relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70 shadow-glass-lg backdrop-blur-xl ${
-        embedded ? "h-full min-h-[480px]" : ""
+        embedded ? "h-full min-h-[600px]" : ""
       }`}
     >
       {/* Inner top glow line */}
