@@ -2,46 +2,74 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const nav = [
-  { href: "/tours", label: "Tours" },
+  { href: "/",             label: "Home" },
+  { href: "/tours",        label: "Tours" },
   { href: "/destinations", label: "Destinations" },
-  { href: "/experiences", label: "Experiences" },
-  { href: "/about", label: "About" },
+  { href: "/experiences",  label: "Experiences" },
+  { href: "/about",        label: "About" },
 ];
 
 export function SiteHeader() {
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled]  = useState(false);
   const pathname = usePathname();
 
-  const currentPage = nav.find((item) => item.href === pathname);
-  const otherPages = nav.filter((item) => item.href !== pathname);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 32);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  function scrollToSerendib() {
+    const el = document.getElementById("serendib-panel");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    setMenuOpen(false);
+  }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-jungle-200/80 bg-jungle-50/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <Link href="/" className="group flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-jungle-700 text-sm font-bold text-white shadow-sm transition group-hover:bg-jungle-600">
-            CE
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "border-b border-white/[0.06] bg-slate-950/90 shadow-[0_4px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+          : "border-b border-transparent bg-transparent"
+      }`}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
+
+        {/* ── Logo ── */}
+        <Link href="/" className="group flex items-center gap-3">
+          {/* Glow orb logo mark */}
+          <span className="relative flex h-9 w-9 items-center justify-center">
+            <span className="absolute inset-0 rounded-full bg-emerald-500/20 blur-md transition group-hover:bg-emerald-500/35" />
+            <span className="relative flex h-9 w-9 items-center justify-center rounded-full border border-emerald-400/30 bg-gradient-to-br from-emerald-400 to-emerald-600 text-xs font-bold text-slate-950 shadow-glow-emerald transition group-hover:shadow-glow-emerald-lg">
+              S
+            </span>
           </span>
-          <span className="font-display text-xl font-semibold tracking-tight text-jungle-900">
-            Ceylon Explorer
+          <span className="flex flex-col leading-none">
+            <span className="font-display text-[1.05rem] font-semibold tracking-tight text-white">
+              Serendib
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-slate-400">
+              Ceylon Explorer
+            </span>
           </span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 sm:flex sm:gap-2">
+        {/* ── Desktop nav ── */}
+        <nav className="hidden items-center gap-1 sm:flex">
           {nav.map((item) => {
             const active = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition sm:px-4 ${
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   active
-                    ? "bg-jungle-700 text-white shadow-sm"
-                    : "text-jungle-700 hover:bg-jungle-100 hover:text-jungle-900"
+                    ? "bg-white/10 text-white"
+                    : "text-slate-400 hover:bg-white/[0.06] hover:text-white"
                 }`}
               >
                 {item.label}
@@ -50,46 +78,72 @@ export function SiteHeader() {
           })}
         </nav>
 
-        {/* Page picker button — mobile only */}
-        <div className="relative sm:hidden">
+        {/* ── CTA + Mobile Toggle ── */}
+        <div className="flex items-center gap-3">
           <button
-            onClick={() => setOpen((prev) => !prev)}
-            aria-expanded={open}
-            className="flex items-center gap-1.5 rounded-full border border-jungle-200 bg-white px-4 py-2 text-sm font-medium text-jungle-800 shadow-sm transition hover:bg-jungle-50"
+            id="header-talk-cta"
+            onClick={scrollToSerendib}
+            className="relative hidden overflow-hidden rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 px-5 py-2 text-sm font-semibold text-slate-950 shadow-glow-emerald transition hover:shadow-glow-emerald-lg hover:scale-[1.03] active:scale-[0.98] sm:flex items-center gap-2"
           >
-            {currentPage ? currentPage.label : "Explore"}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <span className="relative z-10 flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-slate-950 opacity-60 animate-status-pulse" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-slate-950" />
+              </span>
+              Talk to Serendib
+            </span>
           </button>
 
-          {open && (
-            <div className="absolute right-0 mt-2 w-44 overflow-hidden rounded-2xl border border-jungle-200 bg-white shadow-lg">
-              {otherPages.map((item) => (
+          {/* Mobile hamburger */}
+          <button
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-300 transition hover:bg-white/10 sm:hidden"
+            onClick={() => setMenuOpen((p) => !p)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? (
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M3 6h18M3 12h18M3 18h18" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Mobile menu ── */}
+      {menuOpen && (
+        <div className="border-t border-white/[0.06] bg-slate-950/95 backdrop-blur-xl sm:hidden animate-bubble-pop">
+          <div className="mx-auto max-w-7xl space-y-1 px-5 py-4">
+            {nav.map((item) => {
+              const active = pathname === item.href;
+              return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="block px-4 py-3 text-sm font-medium text-jungle-700 transition hover:bg-jungle-50 hover:text-jungle-900"
+                  onClick={() => setMenuOpen(false)}
+                  className={`flex rounded-xl px-4 py-3 text-sm font-medium transition-all ${
+                    active
+                      ? "bg-white/10 text-white"
+                      : "text-slate-400 hover:bg-white/[0.06] hover:text-white"
+                  }`}
                 >
                   {item.label}
                 </Link>
-              ))}
-            </div>
-          )}
+              );
+            })}
+            <button
+              onClick={scrollToSerendib}
+              className="mt-2 w-full rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 py-3 text-sm font-semibold text-slate-950"
+            >
+              Talk to Serendib
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }

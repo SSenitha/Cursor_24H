@@ -10,12 +10,12 @@ const PROMPT = "Chat with Serendib!";
 type Step = "form" | "loading" | "chat";
 
 export function ChatWidget() {
-  const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<Step>("form");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [open, setOpen]     = useState(false);
+  const [step, setStep]     = useState<Step>("form");
+  const [name, setName]     = useState("");
+  const [email, setEmail]   = useState("");
   const [agentUrl, setAgentUrl] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError]   = useState("");
 
   const panelId = useId();
   const labelId = useId();
@@ -35,9 +35,7 @@ export function ChatWidget() {
 
   useEffect(() => {
     if (!open) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
+    const onKeyDown = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, close]);
@@ -45,67 +43,64 @@ export function ChatWidget() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-
-    const trimmedName = name.trim();
+    const trimmedName  = name.trim();
     const trimmedEmail = email.trim();
-
-    if (!trimmedName) { setError("Please enter your name."); return; }
-    if (!trimmedEmail || !trimmedEmail.includes("@")) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
+    if (!trimmedName)                                { setError("Please enter your name."); return; }
+    if (!trimmedEmail || !trimmedEmail.includes("@")) { setError("Please enter a valid email."); return; }
     setStep("loading");
-
     try {
-      const res = await fetch(PRECALL_URL, {
-        method: "POST",
+      const res  = await fetch(PRECALL_URL, {
+        method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: trimmedName, email: trimmedEmail }),
+        body:    JSON.stringify({ name: trimmedName, email: trimmedEmail }),
       });
-
       if (!res.ok) throw new Error(`Status ${res.status}`);
       const data = await res.json();
       if (!data.agent_url) throw new Error("No agent URL in response");
-
       setAgentUrl(data.agent_url);
       setStep("chat");
     } catch {
       setStep("form");
-      setError("Something went wrong connecting to Serendib. Please try again.");
+      setError("Could not connect to Serendib. Please try again.");
     }
   }
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6"
+      className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 sm:bottom-7 sm:right-7"
       aria-live="polite"
     >
+      {/* ── Expanded panel ── */}
       {open && (
         <div
           id={panelId}
           role="dialog"
           aria-modal="true"
           aria-labelledby={labelId}
-          className="flex w-[min(100vw-2rem,480px)] flex-col overflow-hidden rounded-2xl border border-jungle-200 bg-white shadow-2xl shadow-jungle-900/20 ring-1 ring-black/5"
-          style={{ height: step === "chat" ? "min(560px, calc(100vh - 7rem))" : "auto" }}
+          className="flex w-[min(100vw-2.5rem,420px)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-glass-lg animate-bubble-pop"
+          style={{ height: step === "chat" ? "min(540px, calc(100vh - 7rem))" : "auto" }}
         >
           {/* Header */}
-          <header className="flex shrink-0 items-center justify-between gap-3 border-b border-jungle-100 bg-jungle-900 px-5 py-4 text-white">
-            <div className="min-w-0">
-              <p id={labelId} className="truncate font-display text-sm font-semibold tracking-wide text-saffron-300">
-                Ceylon Explorer
-              </p>
-              <p className="truncate text-xs text-jungle-300">AI Agent Portal</p>
+          <header className="flex shrink-0 items-center justify-between gap-3 border-b border-white/[0.07] bg-slate-900/80 px-5 py-4 backdrop-blur-sm">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="relative shrink-0 flex h-9 w-9 items-center justify-center rounded-full border border-emerald-400/30 bg-gradient-to-br from-emerald-400 to-emerald-600 text-slate-950">
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
+                  <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 14.2a7.2 7.2 0 0 1-6-3.22c.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08a7.2 7.2 0 0 1-6 3.22z"/>
+                </svg>
+                <span className="absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full border-2 border-slate-900 bg-emerald-400" />
+              </div>
+              <div id={labelId} className="min-w-0">
+                <p className="text-sm font-semibold text-white leading-none">Serendib</p>
+                <p className="mt-0.5 text-[11px] text-slate-500">AI Travel Companion</p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               {step !== "form" && (
                 <button
                   type="button"
                   onClick={reset}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron-400"
                   aria-label="Start over"
-                  title="Start over"
+                  className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition hover:bg-white/10 hover:text-white"
                 >
                   <ResetIcon />
                 </button>
@@ -113,85 +108,75 @@ export function ChatWidget() {
               <button
                 type="button"
                 onClick={close}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron-400"
                 aria-label="Close chat"
+                className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition hover:bg-white/10 hover:text-white"
               >
                 <CloseIcon />
               </button>
             </div>
           </header>
 
-          {/* Form step */}
+          {/* Form */}
           {step === "form" && (
-            <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 p-6">
-              <p className="text-sm text-jungle-700 leading-relaxed">
-                Before we connect you with <strong>Serendib</strong>, please enter your details below.
-                This ensures we have your information correctly — no need to spell anything out during the call.
+            <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 p-5">
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Introduce yourself and <strong className="text-white">Serendib</strong> will plan your perfect Sri Lanka trip.
               </p>
-
               <div className="flex flex-col gap-1">
-                <label htmlFor="jw-name" className="text-xs font-bold uppercase tracking-wide text-jungle-600">
-                  Your name
-                </label>
+                <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Your name</label>
                 <input
-                  id="jw-name"
                   type="text"
                   autoComplete="name"
-                  placeholder="e.g. Aarav Fernando"
+                  placeholder="e.g. Kavya Perera"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="rounded-lg border border-jungle-200 px-4 py-2.5 text-sm font-sans text-jungle-900 outline-none transition focus:border-saffron-400 focus:ring-2 focus:ring-saffron-400/20"
+                  className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder-slate-600 outline-none transition focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/20"
                 />
               </div>
-
               <div className="flex flex-col gap-1">
-                <label htmlFor="jw-email" className="text-xs font-bold uppercase tracking-wide text-jungle-600">
-                  Email address
-                </label>
+                <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Email</label>
                 <input
-                  id="jw-email"
                   type="email"
                   autoComplete="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="rounded-lg border border-jungle-200 px-4 py-2.5 text-sm font-sans text-jungle-900 outline-none transition focus:border-saffron-400 focus:ring-2 focus:ring-saffron-400/20"
+                  className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder-slate-600 outline-none transition focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/20"
                 />
               </div>
-
               {error && (
-                <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-xs text-red-700">
-                  {error}
-                </p>
+                <p className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-xs text-red-400">{error}</p>
               )}
-
               <button
                 type="submit"
-                className="mt-1 w-full rounded-lg bg-jungle-900 py-3 text-sm font-bold tracking-wide text-saffron-300 transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron-400 active:scale-[0.98]"
+                className="w-full rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 py-3 text-sm font-semibold text-slate-950 shadow-glow-emerald transition hover:shadow-glow-emerald-lg hover:scale-[1.01] active:scale-[0.98]"
               >
-                Start conversation with Serendib →
+                Start conversation →
               </button>
-
-              <p className="text-center text-[11px] text-jungle-400 leading-relaxed">
-                Your details are shared only with Ceylon Explorer and used solely to personalise your consultation.
-              </p>
+              <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-600">
+                <span>Powered by</span>
+                <Image src={beyondPresenceLogo} alt="Beyond Presence" className="h-2.5 w-auto opacity-40 invert" priority />
+              </div>
             </form>
           )}
 
-          {/* Loading step */}
+          {/* Loading */}
           {step === "loading" && (
-            <div className="flex flex-col items-center justify-center gap-4 px-6 py-14 text-jungle-600">
-              <Spinner />
-              <p className="text-sm font-sans">Connecting you to Serendib…</p>
+            <div className="flex flex-col items-center justify-center gap-4 px-5 py-14">
+              <div className="relative h-12 w-12">
+                <div className="absolute inset-0 rounded-full border-2 border-slate-800" />
+                <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-emerald-400 animate-spin-cw" />
+              </div>
+              <p className="text-sm text-slate-400">Connecting to Serendib…</p>
             </div>
           )}
 
-          {/* Chat step */}
+          {/* Chat iframe */}
           {step === "chat" && agentUrl && (
             <iframe
               src={agentUrl}
-              title="Serendib — Ceylon Explorer assistant"
-              className="min-h-0 flex-1 w-full border-0 bg-white"
+              title="Serendib AI travel companion"
+              className="min-h-0 flex-1 w-full border-0 bg-slate-950"
               allow="camera; microphone; fullscreen"
               allowFullScreen
             />
@@ -199,62 +184,52 @@ export function ChatWidget() {
         </div>
       )}
 
-      {/* Floating trigger */}
-      <div className="flex items-center gap-3 sm:gap-4">
+      {/* ── Floating trigger ── */}
+      <div className="flex items-center gap-3">
         {!open && (
           <p
-            className="relative max-w-[13rem] rounded-2xl border-2 border-saffron-200 bg-white px-4 py-3 text-base font-bold leading-snug shadow-xl shadow-saffron-500/20 [animation:chat-bubble-pop_0.55s_ease-out_both] sm:max-w-none"
+            className="relative max-w-[14rem] rounded-2xl border border-white/10 bg-slate-900/90 px-4 py-3 text-sm font-semibold leading-snug shadow-glass backdrop-blur-md animate-chat-bubble-pop"
             role="status"
           >
-            <span className="text-jungle-900">Chat with </span>
-            <span className="text-saffron-600">Serendib!</span>
-            <span className="mt-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-jungle-500">
+            <span className="text-white">Chat with </span>
+            <span className="text-emerald-400">Serendib!</span>
+            <span className="mt-1 flex items-center gap-1.5 text-[10px] font-medium text-slate-500">
               <span>Powered by</span>
-              <Image
-                src={beyondPresenceLogo}
-                alt="Beyond Presence"
-                className="h-3 w-auto"
-                priority
-              />
+              <Image src={beyondPresenceLogo} alt="Beyond Presence" className="h-2.5 w-auto opacity-40 invert" />
             </span>
+            {/* Speech bubble arrow */}
             <span
-              className="absolute -right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rotate-45 border-r-2 border-b-2 border-saffron-200 bg-white"
+              className="absolute -right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 rotate-45 border-r border-b border-white/10 bg-slate-900/90"
               aria-hidden
             />
           </p>
         )}
 
+        {/* FAB button */}
         <div className="relative shrink-0">
           {!open && (
             <>
-              <span
-                className="pointer-events-none absolute inset-0 rounded-full bg-saffron-400/40 [animation:chat-glow-pulse_2s_ease-in-out_infinite]"
-                aria-hidden
-              />
-              <span
-                className="pointer-events-none absolute -inset-1 rounded-full border-2 border-dashed border-saffron-400/50 [animation:chat-ring-spin_8s_linear_infinite]"
-                aria-hidden
-              />
+              <span className="pointer-events-none absolute inset-0 rounded-full bg-emerald-400/20 animate-glow-pulse" aria-hidden />
+              <span className="pointer-events-none absolute -inset-1.5 rounded-full border border-dashed border-emerald-400/30 animate-ring-orbit" aria-hidden />
             </>
           )}
-
           <button
             type="button"
-            onClick={() => open ? close() : setOpen(true)}
+            onClick={() => (open ? close() : setOpen(true))}
             aria-expanded={open}
             aria-controls={open ? panelId : undefined}
             aria-label={open ? "Close Serendib chat" : `${PROMPT} — open chat assistant`}
-            className={`relative z-10 flex items-center justify-center rounded-full border-[3px] border-white/90 bg-gradient-to-br from-saffron-300 via-saffron-500 to-saffron-700 text-jungle-950 transition hover:scale-105 hover:from-saffron-200 hover:via-saffron-400 hover:to-saffron-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-saffron-500 active:scale-95 ${
+            id="chat-widget-fab"
+            className={`relative z-10 flex items-center justify-center rounded-full border border-emerald-400/30 bg-gradient-to-br from-emerald-300 via-emerald-500 to-emerald-700 text-slate-950 shadow-glow-emerald transition hover:scale-105 hover:shadow-glow-emerald-lg active:scale-95 ${
               open
-                ? "h-14 w-14 shadow-lg"
-                : "h-[4.25rem] w-[4.25rem] sm:h-[4.75rem] sm:w-[4.75rem] [animation:chat-icon-bounce_1.2s_ease-in-out_infinite,chat-glow-pulse_2s_ease-in-out_infinite]"
+                ? "h-12 w-12"
+                : "h-[4rem] w-[4rem] animate-chat-bounce"
             }`}
           >
-            {open ? (
-              <CloseIcon className="h-7 w-7" />
-            ) : (
-              <ChatIcon className="h-9 w-9 drop-shadow-sm sm:h-10 sm:w-10" />
-            )}
+            {open
+              ? <CloseIcon className="h-5 w-5" />
+              : <ChatIcon  className="h-7 w-7" />
+            }
           </button>
         </div>
       </div>
@@ -262,31 +237,12 @@ export function ChatWidget() {
   );
 }
 
-function Spinner() {
-  return (
-    <span
-      className="h-7 w-7 rounded-full border-2 border-jungle-100 border-t-saffron-400 [animation:jw-spin_0.8s_linear_infinite]"
-      aria-hidden
-    />
-  );
-}
-
 function ChatIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path
-        fillOpacity="0.15"
-        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-      />
-      <path
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-      />
-      <circle cx="9" cy="11" r="1" fill="currentColor" stroke="none" />
+      <path fillOpacity="0.15" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      <path fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      <circle cx="9"  cy="11" r="1" fill="currentColor" stroke="none" />
       <circle cx="12" cy="11" r="1" fill="currentColor" stroke="none" />
       <circle cx="15" cy="11" r="1" fill="currentColor" stroke="none" />
     </svg>
@@ -295,15 +251,7 @@ function ChatIcon({ className }: { className?: string }) {
 
 function CloseIcon({ className }: { className?: string }) {
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      aria-hidden
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
       <path d="M18 6 6 18M6 6l12 12" />
     </svg>
   );
@@ -311,7 +259,7 @@ function CloseIcon({ className }: { className?: string }) {
 
 function ResetIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden>
       <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
       <path d="M3 3v5h5" />
     </svg>

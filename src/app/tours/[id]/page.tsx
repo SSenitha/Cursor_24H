@@ -57,7 +57,7 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
                   key={day.day}
                   className="flex gap-4 rounded-xl border border-jungle-200 bg-white p-4 shadow-sm"
                 >
-                  <span className="w-16 shrink-0 font-semibold text-saffron-700">{day.day}</span>
+                  <span className="w-16 shrink-0 font-semibold text-jungle-700">{day.day}</span>
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-jungle-900">{day.route}</p>
                     <p className="mt-2 text-jungle-700">{day.description}</p>

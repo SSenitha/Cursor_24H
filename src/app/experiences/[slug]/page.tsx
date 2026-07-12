@@ -39,7 +39,7 @@ export default async function ExperienceDetailPage({ params }: ExperienceDetailP
       >
         ← All experiences
       </Link>
-      <p className="mt-6 text-sm font-medium uppercase tracking-widest text-saffron-700">
+      <p className="mt-6 text-sm font-medium uppercase tracking-widest text-jungle-700">
         Experience
       </p>
       <h1 className="mt-2 font-display text-4xl font-semibold text-jungle-900">{title}</h1>
